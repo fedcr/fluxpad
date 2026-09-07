@@ -6,6 +6,7 @@ var lockFeatureEnabled = true;
 var featureEnabled = false;
 var autoRepeatEnabled = false;
 var jigglerEnabled = false;
+var btModuleConnected = false;
 var currentPage = 0;
 
 var pageData = {};
@@ -83,21 +84,19 @@ function toggleLockMode() {
 
 function toggleFeature() {
     featureEnabled = document.getElementById('feature-toggle').checked;
-    var body = document.getElementById('app-body');
     var dots = document.getElementById('pagination-dots');
     var colorGroup = document.getElementById('color-picker-group');
     
     if (featureEnabled) {
-        body.classList.add('alternate-theme');
         dots.style.display = 'flex';
         colorGroup.style.display = 'block';
         updateThemeColor(pageData[currentPage].color);
     } else {
-        body.classList.remove('alternate-theme');
         dots.style.display = 'none';
         colorGroup.style.display = 'none';
         currentPage = 0;
         updatePaginationUI();
+        var body = document.getElementById('app-body');
         body.style.removeProperty('--primary-blue');
         body.style.removeProperty('--light-blue');
         body.style.removeProperty('--panel-bg-gradient');
@@ -248,6 +247,28 @@ function switchKeyMode() {
     } else if (mode === 6) { 
         document.getElementById('panel-totp').style.display = 'block';
     }
+    
+    checkBluetoothPresence();
+}
+
+function checkBluetoothPresence() {
+    let hasTOTP = false;
+    for (let p = 0; p < 9; p++) {
+        for (let k = 0; k < 11; k++) {
+            if (pageData[p].keyModes[k] == 6) {
+                hasTOTP = true;
+            }
+        }
+    }
+    
+    const btDiv = document.getElementById('bt-module');
+    if (btDiv) {
+        if (btModuleConnected || hasTOTP || document.getElementById('key-mode').value == 6) {
+            btDiv.style.display = 'flex';
+        } else {
+            btDiv.style.display = 'none';
+        }
+    }
 }
 
 document.addEventListener('keydown', function(event){
@@ -277,16 +298,47 @@ async function connectSerial(){
             serialPort = await navigator.serial.requestPort();
             await serialPort.open({ baudRate: 9600 });
             document.getElementById('banner').style.display='none';
+            
+            readLoop();
+
             const textEncoder = new TextEncoderStream();
             textEncoder.readable.pipeTo(serialPort.writable);
             serialWriter = textEncoder.writable.getWriter();
             
             updateGlobalSettings();
+            sendSerialData("CHECK_BT\n");
+            
         } catch (error) { 
             alert("Error during connection..."); 
         }
     } else { 
         alert("Your browser does not support Web Serial, please use Chrome or Edge."); 
+    }
+}
+
+async function readLoop() {
+    const textDecoder = new TextDecoderStream();
+    const readableStreamClosed = serialPort.readable.pipeTo(textDecoder.writable);
+    const reader = textDecoder.readable.getReader();
+    let buffer = "";
+
+    try {
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            buffer += value;
+            let lines = buffer.split('\n');
+            buffer = lines.pop();
+            
+            for (let line of lines) {
+                if (line.includes("PING") || line.includes("BT_DETECTED") || line.includes("HAS_BT:1")) {
+                    btModuleConnected = true;
+                    checkBluetoothPresence();
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Reading interrupted", error);
     }
 }
 
@@ -366,6 +418,8 @@ function saveToDevice() {
         sendSerialData("SET_TOTP:" + targetPage + ":" + selectedKeyIndex + ":" + totpSecret + "\n");
     }
 
+    checkBluetoothPresence();
+
     var saveButton = document.getElementById('button-save');
     var originalText = saveButton.innerText;
     saveButton.innerText = "SAVING COMPLETED!";
@@ -378,7 +432,7 @@ function saveToDevice() {
 }
 
 // ====================================================
-// FLUXPAD COMMUNITY PRESETS ENGINE (NO LOCKS)
+// FLUXPAD COMMUNITY PRESETS ENGINE (FULLY OPEN)
 // ====================================================
 
 const DEFAULT_COMMUNITY_PRESETS = [
@@ -662,4 +716,5 @@ function onPresetSelected(code) {
 // Lifecycle Init
 document.addEventListener('DOMContentLoaded', function() {
     populatePresetDropdown();
+    checkBluetoothPresence();
 });
