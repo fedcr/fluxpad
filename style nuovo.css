@@ -14,21 +14,6 @@
     --knob-gradient: radial-gradient(circle, #f8f9fa 30%, #e8eaed 70%);
 }
 
-.alternate-theme {
-    --main-background: #121212;
-    --panels-background: #1e1e24;
-    --text-color: #f1f1f1;
-    --secondary-text: #a0a0a0;
-    --primary-blue: #4d66e8; 
-    --hover-blue: #3a50c7;
-    --light-blue: rgba(77, 102, 232, 0.18);
-    --button-background: #2b2b36;
-    --light-shadow: 0 4px 6px rgba(0,0,0,0.4);
-    --strong-shadow: 0 6px 12px rgba(0,0,0,0.6);
-    --border-color: #333333;
-    --knob-gradient: radial-gradient(circle, #2b2b36 30%, #1a1a20 70%);
-}
-
 body {
     font-family: Helvetica, Arial, sans-serif;
     background-color: var(--main-background);
@@ -36,7 +21,6 @@ body {
     margin: 0;
     display: flex;
     height: 100vh;
-    transition: background-color 0.4s, color 0.4s;
 }
 
 .main-container { 
@@ -50,33 +34,128 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    /* DYNAMIC GRADIENT BASED ON JS VARIABLE */
     background: var(--panel-bg-gradient, var(--panels-background));
     border-right: 1px solid var(--panels-background);
     position: relative;
+    transition: background 0.4s ease;
 }
 
-/* --------- LOGO E BRANDING --------- */
+/* --------- DYNAMIC LOGOS (MASK IMAGE TECHNIQUE) --------- */
 .top-left-branding {
     position: absolute;
     top: 25px;
     left: 25px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
     align-items: flex-start;
     z-index: 10;
 }
 
+.dynamic-logo {
+    background-color: var(--primary-blue);
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: left center;
+    transition: background-color 0.4s ease, transform 0.2s ease, filter 0.2s ease;
+}
+
 .brand-logo {
-    height: 60px; 
-    width: auto;
-    object-fit: contain;
+    width: 120px; 
+    height: 65px;
 }
 
 .sponsor-logo {
-    height: 22px; 
-    width: auto;
-    object-fit: contain;
+    width: 90px; 
+    height: 25px;
+}
+
+.ks-link:hover .dynamic-logo, .sponsor-link:hover .dynamic-logo {
+    filter: brightness(0.85);
+    transform: scale(1.03);
+}
+
+/* --------- BLUETOOTH MODULE ADD-ON --------- */
+.hardware-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 460px; /* Same max width as the device */
+}
+
+.bt-module {
+    width: 100%;
+    height: 65px;
+    background-color: var(--main-background);
+    border-radius: 24px;
+    box-shadow: var(--strong-shadow);
+    border: 1px solid var(--border-color);
+    display: none; /* Controlled by JS */
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    transition: all 0.4s ease;
+}
+
+.bt-module-inner {
+    color: var(--primary-blue);
+    font-weight: bold;
+    font-size: 13px;
+    opacity: 0.6;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* --------- MAIN DEVICE --------- */
+.device {
+    background-color: var(--main-background); 
+    padding: 40px; 
+    border-radius: 24px;
+    box-shadow: var(--strong-shadow); 
+    border: 1px solid var(--border-color);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 30px; 
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr); gap: 20px;
+}
+
+.key {
+    width: 80px; height: 80px; background-color: var(--button-background);
+    border: 2px solid transparent; border-radius: var(--rounded-border);
+    color: var(--text-color); font-size: 20px; font-weight: 500; cursor: pointer;
+    box-shadow: var(--light-shadow); transition: all 0.3s ease;
+}
+
+.key:hover { filter: brightness(1.05); transform: translateY(-2px); border-color: var(--primary-blue); }
+
+.key.selected {
+    background-color: var(--light-blue); border-color: var(--primary-blue);
+    color: var(--primary-blue); font-weight: bold;
+}
+
+.knob {
+    width: 80px; height: 80px; background: var(--knob-gradient);
+    border-radius: 50%; border: 2px solid var(--border-color); display: flex;
+    justify-content: center; align-items: center; color: var(--secondary-text);
+    font-size: 14px; font-weight: bold; text-align: center; box-shadow: var(--light-shadow);
+    cursor: pointer; transition: all 0.3s ease;
+}
+
+.knob:hover { transform: translateY(-2px); border-color: var(--primary-blue); }
+.knob.selected {
+    background: var(--light-blue); border-color: var(--primary-blue);
+    color: var(--primary-blue);
 }
 
 .right-panel {
@@ -88,7 +167,6 @@ body {
     align-items: center;
     justify-content: center;
     position: relative; 
-    transition: background-color 0.4s;
 }
 
 /* --------- FAB E IMPOSTAZIONI GLOBALI --------- */
@@ -175,10 +253,6 @@ body {
     color: var(--primary-blue);
 }
 
-.alternate-theme .mini-settings-fab {
-    background-color: var(--button-background);
-}
-
 .mini-settings-fab:hover {
     border-color: var(--primary-blue);
     transform: scale(1.05);
@@ -200,7 +274,7 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
-/* --------- BETA BADGE (SOLID BLUE WITH WHITE TEXT) --------- */
+/* --------- BETA BADGE (SOLID WHITE TEXT) --------- */
 .beta-badge {
     display: inline-block;
     background-color: var(--primary-blue);
@@ -212,11 +286,6 @@ body {
     letter-spacing: 0.5px;
     vertical-align: middle;
     box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-}
-
-.alternate-theme .beta-badge {
-    background-color: var(--primary-blue);
-    color: #ffffff !important;
 }
 
 /* --------- TOOLTIP E OVERLAY --------- */
@@ -252,46 +321,6 @@ body {
 
 .help-tooltip:hover::after {
     opacity: 1; transform: translateX(-50%) translateY(-4px);
-}
-
-/* --------- DISPOSITIVO --------- */
-.device {
-    background-color: var(--main-background); padding: 40px; border-radius: 24px;
-    box-shadow: var(--strong-shadow); border: 1px solid var(--border-color);
-    display: flex; flex-direction: column; align-items: center; gap: 30px; transition: all 0.4s;
-}
-
-.grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr); gap: 20px;
-}
-
-.key {
-    width: 80px; height: 80px; background-color: var(--button-background);
-    border: 2px solid transparent; border-radius: var(--rounded-border);
-    color: var(--text-color); font-size: 20px; font-weight: 500; cursor: pointer;
-    box-shadow: var(--light-shadow); transition: all 0.3s ease;
-}
-
-.key:hover { filter: brightness(1.05); transform: translateY(-2px); border-color: var(--primary-blue); }
-
-.key.selected {
-    background-color: var(--light-blue); border-color: var(--primary-blue);
-    color: var(--primary-blue); font-weight: bold;
-}
-
-.knob {
-    width: 80px; height: 80px; background: var(--knob-gradient);
-    border-radius: 50%; border: 2px solid var(--border-color); display: flex;
-    justify-content: center; align-items: center; color: var(--secondary-text);
-    font-size: 14px; font-weight: bold; text-align: center; box-shadow: var(--light-shadow);
-    cursor: pointer; transition: all 0.3s ease;
-}
-
-.knob:hover { transform: translateY(-2px); border-color: var(--primary-blue); }
-.knob.selected {
-    background: var(--light-blue); border-color: var(--primary-blue);
-    color: var(--primary-blue);
 }
 
 /* --------- INPUTS E MENU --------- */
@@ -393,26 +422,12 @@ input:checked + .slider:before { transform: translateX(22px); }
     font-size: 13px;
     font-weight: 500;
     z-index: 1000;
-    transition: background-color 0.4s, border-color 0.4s;
-}
-
-.alternate-theme .app-footer {
-    background-color: #16161b;
-    border-color: var(--border-color);
 }
 
 .footer-left, .footer-right {
     display: flex;
     align-items: center;
     gap: 12px;
-}
-
-.footer-center {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    justify-content: center;
 }
 
 .feedback-btn {
@@ -441,44 +456,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 .support-btn {
     background-color: #FF5E5B !important;
     color: #ffffff !important;
-}
-
-.alternate-theme .support-btn {
-    color: #ffffff !important;
-    background-color: #FF5E5B !important;
-}
-
-/* CENTERED KICKSTARTER ICON BUTTON */
-.kickstarter-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background-color: var(--button-background);
-    color: #151844;
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    text-decoration: none;
-    font-size: 22px;
-    font-weight: 900;
-    box-shadow: var(--light-shadow);
-    transition: all 0.2s ease;
-}
-
-.alternate-theme .kickstarter-btn {
-    color: #ffffff;
-}
-
-.kickstarter-btn:hover {
-    color: #05CE78;
-    border-color: #05CE78;
-    background-color: var(--main-background);
-    transform: translateY(-2px);
-}
-
-.alternate-theme .kickstarter-btn:hover {
-    background-color: #1e1e24;
 }
 
 /* --------- MODALS --------- */
