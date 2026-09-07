@@ -251,6 +251,7 @@ function switchKeyMode() {
     checkBluetoothPresence();
 }
 
+// Mostra o nasconde il blocco del modulo bluetooth nell'interfaccia
 function checkBluetoothPresence() {
     let hasTOTP = false;
     for (let p = 0; p < 9; p++) {
@@ -432,7 +433,7 @@ function saveToDevice() {
 }
 
 // ====================================================
-// FLUXPAD COMMUNITY PRESETS ENGINE (FULLY OPEN)
+// FLUXPAD COMMUNITY PRESETS ENGINE
 // ====================================================
 
 const DEFAULT_COMMUNITY_PRESETS = [
