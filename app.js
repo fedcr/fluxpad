@@ -10,7 +10,8 @@ var btModuleConnected = false;
 var currentPage = 0;
 
 var pageData = {};
-var defaultColors = ["#00EA87", "#FF0055", "#0088FF", "#FFCC00", "#9900FF", "#00FFFF", "#FF6600", "#FFFFFF", "#FF00FF"];
+var defaultColors = ["#5a1e1e", "#1e485a", "#5a1e54", "#565a1e", "#295a1e", "#1e5a56", "#1e215a", "#5a1e28", "#5a4d1e"];
+
 
 // Inizializzazione della memoria del configuratore
 for (let i = 0; i < 9; i++) {
