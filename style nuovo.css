@@ -53,26 +53,26 @@ body {
     z-index: 10;
 }
 
+.brand-link, .sponsor-link {
+    display: block;
+    cursor: pointer;
+}
+
 .dynamic-logo {
     background-color: var(--primary-blue);
     -webkit-mask-size: contain;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: left center;
-    transition: background-color 0.4s ease, transform 0.2s ease, filter 0.2s ease;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: left center;
+    transition: background-color 0.4s ease, transform 0.2s ease;
 }
 
-.brand-logo {
-    width: 120px; 
-    height: 65px;
-}
+.brand-logo { width: 120px; height: 60px; }
+.sponsor-logo { width: 100px; height: 26px; }
 
-.sponsor-logo {
-    width: 90px; 
-    height: 25px;
-}
-
-.ks-link:hover .dynamic-logo, .sponsor-link:hover .dynamic-logo {
-    filter: brightness(0.85);
+.brand-link:hover .dynamic-logo, .sponsor-link:hover .dynamic-logo {
     transform: scale(1.03);
 }
 
@@ -81,33 +81,27 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 8px; /* Gap piccolissimo per simulare l'attacco meccanico */
     width: 100%;
-    max-width: 460px; /* Same max width as the device */
+    max-width: 460px; /* Stessa larghezza fissa del dispositivo sotto */
 }
 
 .bt-module {
     width: 100%;
-    height: 65px;
+    height: 75px; 
     background-color: var(--main-background);
     border-radius: 24px;
     box-shadow: var(--strong-shadow);
     border: 1px solid var(--border-color);
-    display: none; /* Controlled by JS */
+    display: none; /* Controllato da JS: block o flex quando attivo */
     justify-content: center;
     align-items: center;
-    box-sizing: border-box;
-    transition: all 0.4s ease;
-}
-
-.bt-module-inner {
-    color: var(--primary-blue);
-    font-weight: bold;
-    font-size: 13px;
-    opacity: 0.6;
-    display: flex;
     gap: 8px;
-    align-items: center;
+    color: var(--primary-blue);
+    font-weight: 800;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 /* --------- MAIN DEVICE --------- */
@@ -274,7 +268,7 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
-/* --------- BETA BADGE (SOLID WHITE TEXT) --------- */
+/* --------- BETA BADGE (SOLID BLUE WITH WHITE TEXT) --------- */
 .beta-badge {
     display: inline-block;
     background-color: var(--primary-blue);
