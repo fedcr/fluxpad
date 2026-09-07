@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FluxPad Configurator - Community Edition</title>
+        <link rel="icon" type="image/png" href="logo fluxpad.png">
+        <link rel="stylesheet" href="style nuovo.css">
+    </head>
+
+    <body id="app-body">
+        <div id="banner">
+            <button class="primary-button" style="width: auto; padding: 15px 36px;" onclick="connectSerial()">CONNECT</button>
+        </div>
+        
+        <div class="main-container">
+            <!-- LEFT PANEL: HARDWARE DEVICE PREVIEW -->
+            <div class="left-panel">
+                
+                <!-- BRANDING LOGOS CONTAINER (No Overlap) -->
+                <div class="top-left-branding">
+                    <img src="logo_everythink.png" alt="EveryThink Logo" class="brand-logo">
+                    <img src="pcbway_logo.png" alt="PCBWay" class="sponsor-logo">
+                </div>
+
+                <div class="device">
+                    <div class="grid" id="grid">
+                        <div></div><div></div><div></div><div></div>
+
+                        <button class="key" onclick="selectKey(0, this)">1</button>
+                        <button class="key" onclick="selectKey(1, this)">2</button>
+                        <button class="key" onclick="selectKey(2, this)">3</button>
+                        <div class="knob" id="knob-btn" onclick="selectKey(11, this)">VOL</div>
+
+                        <button class="key" onclick="selectKey(3, this)">4</button>
+                        <button class="key" onclick="selectKey(4, this)">5</button>
+                        <button class="key" onclick="selectKey(5, this)">6</button>
+                        <button class="key" onclick="selectKey(6, this)">7</button>
+
+                        <button class="key" onclick="selectKey(7, this)">8</button>
+                        <button class="key" onclick="selectKey(8, this)">9</button>
+                        <button class="key" onclick="selectKey(9, this)">10</button>
+                        <button class="key" onclick="selectKey(10, this)">11</button>
+                    </div>
+                    
+                    <div class="pagination" id="pagination-dots" style="display: none;">
+                        <span class="dot active" onclick="setPage(0)"></span>
+                        <span class="dot" onclick="setPage(1)"></span>
+                        <span class="dot" onclick="setPage(2)"></span>
+                        <span class="dot" onclick="setPage(3)"></span>
+                        <span class="dot" onclick="setPage(4)"></span>
+                        <span class="dot" onclick="setPage(5)"></span>
+                        <span class="dot" onclick="setPage(6)"></span>
+                        <span class="dot" onclick="setPage(7)"></span>
+                        <span class="dot" onclick="setPage(8)"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: CONTROLS & SETTINGS -->
+            <div class="right-panel">
+
+                <!-- TOP GEAR: Global Settings -->
+                <div class="settings-fab top-fab" onclick="toggleTopMenu()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </div>
+                
+                <div id="top-settings-panel" class="settings-panel top-panel">
+                    <div class="slider-control" style="padding: 0 15px;">
+                        <div class="label-with-help" style="margin-bottom: 5px;">
+                            <label style="margin:0;">Debounce Time <span id="debounce-val">10ms</span></label>
+                            <span class="help-tooltip" data-tooltip="Switch debounce time. Increase this value if you notice accidental double clicks when pressing a key once.">?</span>
+                        </div>
+                        <input type="range" id="global-debounce" min="1" max="20" step="1" value="10" onchange="updateGlobalSettings()" oninput="document.getElementById('debounce-val').innerText = this.value + 'ms'">
+                    </div>
+                    <div class="slider-control" style="padding: 0 15px; margin-bottom: 5px; margin-top: 15px;">
+                        <div class="label-with-help" style="margin-bottom: 5px;">
+                            <label style="margin:0;">Encoder Multiplier <span id="enc-mult-val">x1</span></label>
+                            <span class="help-tooltip" data-tooltip="Multiplies encoder steps. E.g., setting it to x5 sends 5 Volume or Scroll commands per single physical click of the knob.">?</span>
+                        </div>
+                        <input type="range" id="global-enc-mult" min="1" max="10" step="1" value="1" onchange="updateGlobalSettings()" oninput="document.getElementById('enc-mult-val').innerText = 'x' + this.value">
+                    </div>
+                </div>
+
+                <!-- BOTTOM 3-DOTS: Device Features -->
+                <div class="settings-fab" onclick="toggleBottomMenu()">&#8942;</div>
+
+                <div id="bottom-settings-panel" class="settings-panel">
+                    <!-- Switch Lock / Stealth Mode -->
+                    <div class="feature-header" style="margin-bottom: 0; padding: 10px 15px; width: 100%;">
+                        <div class="label-with-help">
+                            <span class="toggle-label">Lock / Stealth Mode</span>
+                            <span class="help-tooltip" data-tooltip="When enabled, you can hold Key 1 (Top-Left) and Key 11 (Bottom-Right) together for 2 seconds to temporarily lock the pad.">?</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="lock-toggle" onchange="toggleLockMode()" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <!-- Switch Multi-Page -->
+                    <div class="feature-header" style="margin-bottom: 0; padding: 10px 15px; width: 100%;">
+                        <div class="label-with-help">
+                            <span class="toggle-label">Enable Multi-Page</span>
+                            <span class="help-tooltip" data-tooltip="Divides the device into 9 different virtual pages. You can change the active page by pressing and holding the knob while rotating it.">?</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="feature-toggle" onchange="toggleFeature()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    
+                    <!-- Switch Auto-Repeat -->
+                    <div class="feature-header" style="margin-bottom: 0; padding: 10px 15px; width: 100%;">
+                        <div class="label-with-help">
+                            <span class="toggle-label">Auto-Repeat</span>
+                            <span class="help-tooltip" data-tooltip="Press Key 1 three times consecutively to arm. The next pressed key will be repeated infinitely until you press any key again.">?</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="autorepeat-toggle" onchange="toggleAutoRepeat()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div id="autorepeat-configs" style="display: none; flex-direction: column; gap: 15px; padding: 5px 15px;">
+                        <div class="slider-control">
+                            <label>Auto-R. Delay <span id="ar-delay-val">500ms</span></label>
+                            <input type="range" id="ar-delay" min="100" max="2000" step="50" value="500" oninput="updateAutoRepeatConfig()">
+                        </div>
+                        <div class="slider-control">
+                            <label>Auto-R. Speed <span id="ar-speed-val">50ms</span></label>
+                            <input type="range" id="ar-speed" min="10" max="500" step="10" value="50" oninput="updateAutoRepeatConfig()">
+                        </div>
+                    </div>
+
+                    <hr style="width: 100%; border: 0; border-top: 1px solid var(--border-color); margin: 5px 0;">
+
+                    <!-- Switch Jiggler -->
+                    <div class="feature-header" style="margin-bottom: 0; padding: 10px 15px; width: 100%;">
+                        <div class="label-with-help">
+                            <span class="toggle-label">Anti-Sleep Jiggler</span>
+                            <span class="help-tooltip" data-tooltip="Sends an invisible mouse movement at set intervals to prevent your PC from sleeping or showing an 'Away' status.">?</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="jiggler-toggle" onchange="toggleJiggler()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div id="jiggler-configs" style="display: none; flex-direction: column; gap: 15px; padding: 5px 15px;">
+                        <div class="slider-control">
+                            <label>Jiggle Interval <span id="jiggler-val">5 min</span></label>
+                            <input type="range" id="jiggler-interval" min="1" max="15" step="1" value="5" onchange="updateJigglerConfig()" oninput="document.getElementById('jiggler-val').innerText = this.value + ' min'">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRESET SELECTOR & SHARE BUTTON -->
+                <div class="controls-group" id="preset-group">
+                    <div class="label-with-help">
+                        <label style="margin:0;">PAGE PRESET <span class="beta-badge">BETA</span></label>
+                        <span class="help-tooltip" data-tooltip="Load pre-configured shortcut maps or share your layout with the community.">?</span>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                        <select id="preset-select" onchange="onPresetSelected(this.value)" style="flex: 1;">
+                            <option value="">-- Load Preset --</option>
+                        </select>
+                        <button class="primary-button" style="width: auto; padding: 0 16px;" onclick="openShareModal()" title="Share Current Layout">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Page Color Picker -->
+                <div class="controls-group" id="color-picker-group" style="display: none;">
+                    <label>PAGE LED COLOR</label>
+                    <input type="color" id="page-color" value="#00EA87" onchange="savePageColor()">
+                </div>
+
+                <!-- Key Being Edited -->
+                <div class="controls-group">
+                    <label>KEY BEING EDITED</label>
+                    <input type="text" id="display-selected-key" style="text-align: center; font-weight: bold; color: var(--primary-blue);" readonly>
+                </div>
+
+                <!-- KEY ACTION CONFIGURATION WRAPPER -->
+                <div id="action-settings-container" style="display: none; position: relative; width: 100%; max-width: 350px;">
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">
+                        <label style="margin:0; color: var(--primary-blue); font-weight: bold;">KEY CONFIGURATION</label>
+                        <div class="mini-settings-fab" onclick="toggleKeySettings()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- MINIPANEL (Key Mode Selection) -->
+                    <div id="key-settings-panel" class="settings-panel mini-panel" style="display: none;">
+                        <div style="background: var(--button-background); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);">
+                            <div class="controls-group" style="margin-bottom: 0; width: 100%;">
+                                <div class="label-with-help">
+                                    <label style="margin:0;">KEY MODE</label>
+                                    <span class="help-tooltip" data-tooltip="Choose the behavior of the key.">?</span>
+                                </div>
+                                <select id="key-mode" onchange="switchKeyMode()" style="margin-top: 8px;">
+                                    <option value="0">Standard (Single Action)</option>
+                                    <option value="7">Text String (Insert Full Text)</option>
+                                    <option value="1">Tap-Dance (1 Click, 2 Clicks, Hold)</option>
+                                    <option value="2">Burst / Rapid Fire</option>
+                                    <option value="3">Axis Swap: Vertical Scroll</option>
+                                    <option value="4">Axis Swap: Horizontal Scroll</option>
+                                    <option value="5">Toggle Numpad</option>
+                                    <option value="6">TOTP (2FA Code Generator via ESP32)</option>
+                                    <option value="8">Mouse Left Click</option>
+                                    <option value="9">Mouse Right Click</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PANELS 0, 2 & 7: STANDARD / BURST / TEXT -->
+                    <div id="panel-standard" style="display: none; width: 100%;">
+                        <div class="controls-group" id="shortcut-group">
+                            <label>BASE SHORTCUT</label>
+                            <input type="text" id="input-shortcut" class="capture-shortcut" readonly placeholder="Press a combination...">
+                        </div>
+                        <div class="controls-group" id="string-group" style="display: none;">
+                            <label>TEXT TO INSERT</label>
+                            <input type="text" id="input-string" placeholder="Type text here...">
+                        </div>
+                    </div>
+
+                    <!-- PANEL BURST PARAMS -->
+                    <div id="panel-burst-params" style="display: none; width: 100%;">
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                            <div class="slider-control" style="flex: 1;">
+                                <label>Shots</label>
+                                <input type="number" id="burst-count" min="2" max="50" value="5" style="padding: 10px; width: 100%;">
+                            </div>
+                            <div class="slider-control" style="flex: 1;">
+                                <label>Delay (ms)</label>
+                                <input type="number" id="burst-speed" min="10" max="500" value="50" style="padding: 10px; width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PANEL 1: TAP-DANCE -->
+                    <div id="panel-tapdance" style="display: none; width: 100%;">
+                        <p style="font-size: 12px; color: var(--secondary-text); margin-top: 0;">Click inside the field and press the keys to record.</p>
+                        <div class="controls-group" style="margin-bottom: 15px;">
+                            <label>1 CLICK SHORTCUT</label>
+                            <input type="text" id="td-single" class="capture-shortcut" readonly placeholder="Single Click...">
+                        </div>
+                        <div class="controls-group" style="margin-bottom: 15px;">
+                            <label>2 CLICKS SHORTCUT</label>
+                            <input type="text" id="td-double" class="capture-shortcut" readonly placeholder="Double Click...">
+                        </div>
+                        <div class="controls-group" style="margin-bottom: 20px;">
+                            <label>HOLD SHORTCUT</label>
+                            <input type="text" id="td-hold" class="capture-shortcut" readonly placeholder="Long Press...">
+                        </div>
+                    </div>
+
+                    <!-- PANEL 3/4: SWAP AXIS INFO -->
+                    <div id="panel-axis" style="display: none; width: 100%; margin-bottom: 20px;">
+                        <div style="padding: 15px; background: var(--panels-background); border-radius: 12px; font-size: 13px; color: var(--secondary-text); border: 1px solid var(--border-color); line-height: 1.4;">
+                            <strong>Info:</strong> While holding this physical key, the encoder knob will act as a mouse scroll wheel.
+                        </div>
+                    </div>
+
+                    <!-- PANEL 5: NUMPAD INFO -->
+                    <div id="panel-numpad" style="display: none; width: 100%; margin-bottom: 20px;">
+                        <div style="padding: 15px; background: var(--panels-background); border-radius: 12px; font-size: 13px; color: var(--secondary-text); border: 1px solid var(--border-color); line-height: 1.4;">
+                            <strong>Info:</strong> Pressing this key activates a standard Numpad mode. The Numpad remains active until you press the <i>Exit</i> key to return to normal.<br><br>
+                            <strong>Key Layout Mapping:</strong>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; text-align: center; font-weight: bold; color: var(--text-color);">
+                                <div style="background: var(--button-background); padding: 8px; border-radius: 6px; box-shadow: var(--light-shadow);">7</div>
+                                <div style="background: var(--button-background); padding: 8px; border-radius: 6px; box-shadow: var(--light-shadow);">8</div>
+                                <div style="background: var(--button-background); padding: 8px; border-radius: 6px; box-shadow: var(--light-shadow);">9</div>
+                                <div style="background: transparent;"></div>
+                                <div style="background: var(--button-background); padding: 8px; border-radius: 6px; box-shadow: var(--light-shadow);">4</div>
+                                <div style="background: var(--button-background); padding: 8px; border-radius: 6px; box-shadow: var(--light-shadow);">5</div>
+                                <div style="background: var(--button-background); padding: 8px; border-radius: 6px; box-shadow: var(--light-shadow);">6</div>
+                                <div style="background: #e57373; color: white; padding: 8px; border-radius: 6px; box-shadow: var(--light-shadow); font-size: 12px; display: flex; align-items: center; justify-content: center;" title="Exit Numpad Mode">Exit</div>
+                                <div style="background: var(--button-background); padding: 8px; border-radius: 6px; box-shadow: var(--light-shadow);">1</div>
+                                <div style="background: var(--button-background); padding: 8px; border-radius: 6px; box-shadow: var(--light-shadow);">2</div>
+                                <div style="background: var(--button-background); padding: 8px; border-radius: 6px; box-shadow: var(--light-shadow);">3</div>
+                                <div style="background: var(--button-background); padding: 8px; border-radius: 6px; box-shadow: var(--light-shadow);">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PANEL 6: TOTP -->
+                    <div id="panel-totp" style="display: none; width: 100%; margin-bottom: 20px;">
+                        <div style="padding: 15px; background: rgba(49, 54, 133, 0.1); border-radius: 12px; font-size: 13px; color: var(--secondary-text); border: 1px solid var(--primary-blue); line-height: 1.4; margin-bottom: 15px;">
+                            <strong>Note:</strong> Generating TOTP codes requires the FluxPad Bluetooth Add-on (ESP32) connected to the device.
+                        </div>
+                        <div class="controls-group">
+                            <label>2FA SECRET KEY (Base32)</label>
+                            <input type="text" id="input-totp" placeholder="e.g. JBSWY3DPEHPK3PXP">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="controls-group" id="save-btn-group" style="display: none; margin-top: 20px;">
+                    <button class="primary-button" id="button-save" onclick="saveToDevice()">APPLY TO KEY</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SHARE PRESET MODAL -->
+        <div id="share-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h3 style="margin:0; color:var(--primary-blue);">Share Preset <span class="beta-badge">BETA</span></h3>
+                    <span style="cursor:pointer; font-size:22px; font-weight:bold; color:var(--secondary-text);" onclick="closeShareModal()">&times;</span>
+                </div>
+                <p style="font-size:13px; color:var(--secondary-text); margin-top:0;">Publish your shortcut layout anonymously to the community feed.</p>
+                
+                <div class="controls-group" style="margin-bottom: 12px; width:100%;">
+                    <label>PRESET NAME</label>
+                    <input type="text" id="share-title" placeholder="e.g. Fortnite Battle Macros or Figma Workflow">
+                </div>
+                <div class="controls-group" style="margin-bottom: 12px; width:100%;">
+                    <label>SOFTWARE / CATEGORY</label>
+                    <input type="text" id="share-category" placeholder="e.g. Gaming, Video Editing, 3D, Office">
+                </div>
+                <div class="controls-group" style="margin-bottom: 15px; width:100%;">
+                    <label>SCOPE</label>
+                    <select id="share-scope">
+                        <option value="current">Current Active Page Only</option>
+                        <option value="all">All 9 Multi-Pages (Creates 1 post per page)</option>
+                    </select>
+                </div>
+
+                <button class="primary-button" onclick="submitSharePreset()">PUBLISH TO COMMUNITY</button>
+            </div>
+        </div>
+
+        <!-- COMMUNITY FEED MODAL -->
+        <div id="community-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-card feed-modal-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <div>
+                        <h3 style="margin:0; color:var(--primary-blue);">Community Preset Feed <span class="beta-badge">BETA</span></h3>
+                        <span style="font-size:12px; color:var(--secondary-text);">Explore community creations, like layouts, and copy or apply codes directly.</span>
+                    </div>
+                    <span style="cursor:pointer; font-size:24px; font-weight:bold; color:var(--secondary-text);" onclick="closeCommunityModal()">&times;</span>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <input type="text" id="feed-search" placeholder="Search presets (e.g. Discord, Spotify, Gaming)..." oninput="filterCommunityFeed(this.value)" style="flex: 2;">
+                    <input type="text" id="direct-code-input" placeholder="Paste Code (e.g. FP-DSC-MUTE)" style="flex: 1; text-transform: uppercase;">
+                    <button class="primary-button" style="width: auto; padding: 0 18px;" onclick="importDirectCode()">IMPORT</button>
+                </div>
+
+                <div id="community-feed-grid" class="feed-grid"></div>
+            </div>
+        </div>
+
+        <!-- FOOTER BAR -->
+        <footer class="app-footer">
+            <div class="footer-left">
+                <button class="feedback-btn" onclick="openCommunityModal()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    Explore Presets <span class="beta-badge" style="margin-left: 4px; font-size: 9px; padding: 2px 5px;">BETA</span>
+                </button>
+            </div>
+            
+            <!-- CENTERED KICKSTARTER BUTTON -->
+            <div class="footer-center">
+                <a href="https://www.kickstarter.com/projects/everythink/fluxpad-ultra-affordable-mechanical-macro-pad" target="_blank" class="kickstarter-btn" title="Back FluxPad on Kickstarter">K</a>
+            </div>
+
+            <div class="footer-right">
+                <a href="fluxpad_instructions.pdf" download class="feedback-btn" style="background-color: var(--button-background); color: var(--text-color);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Instructions
+                </a>
+                <a href="dashboard.html" class="feedback-btn" style="background-color: var(--button-background); color: var(--text-color);">
+                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                     Dashboard
+                </a>
+                <a href="https://ko-fi.com/iltuolink" target="_blank" class="feedback-btn support-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    Support Me
+                </a>
+            </div>
+        </footer>
+
+        <script src="app.js"></script>
+    </body>
+</html>
