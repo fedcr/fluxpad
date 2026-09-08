@@ -10,10 +10,10 @@ var btModuleConnected = false;
 var currentPage = 0;
 
 var pageData = {};
-var defaultColors = ["#5a1e1e", "#1e485a", "#5a1e54", "#565a1e", "#295a1e", "#1e5a56", "#1e215a", "#5a1e28", "#5a4d1e"];
+// New balanced default palette
+var defaultColors = ["#3B82F6", "#10B981", "#8B5CF6", "#F97316", "#EC4899", "#06B6D4", "#F59E0B", "#6366F1", "#EF4444"];
 
-
-// Inizializzazione della memoria del configuratore
+// Memory Initialization
 for (let i = 0; i < 9; i++) {
     pageData[i] = { 
         color: defaultColors[i], 
@@ -98,7 +98,7 @@ function toggleFeature() {
         currentPage = 0;
         updatePaginationUI();
         var body = document.getElementById('app-body');
-        body.style.removeProperty('--primary-blue');
+        body.style.setProperty('--primary-blue', '#3B82F6');
         body.style.removeProperty('--light-blue');
         body.style.removeProperty('--panel-bg-gradient');
     }
@@ -252,7 +252,6 @@ function switchKeyMode() {
     checkBluetoothPresence();
 }
 
-// Mostra o nasconde il blocco del modulo bluetooth nell'interfaccia
 function checkBluetoothPresence() {
     let hasTOTP = false;
     for (let p = 0; p < 9; p++) {
@@ -434,15 +433,16 @@ function saveToDevice() {
 }
 
 // ====================================================
-// FLUXPAD COMMUNITY PRESETS ENGINE
+// FLUXPAD COMMUNITY PRESETS ENGINE (FULLY OPEN)
 // ====================================================
 
+// Specific brand colors for presets ensuring they look distinct
 const DEFAULT_COMMUNITY_PRESETS = [
     {
         code: "PRO-OBS",
         name: "OBS Studio Pro",
         category: "Streaming",
-        color: "#360854",
+        color: "#2B2E3E",
         likes: 312,
         macros: {0:"ctrl+alt+1", 1:"ctrl+alt+2", 2:"ctrl+alt+3", 3:"ctrl+f1", 4:"ctrl+f2", 5:"ctrl+f3", 6:"ctrl+f4", 7:"ctrl+shift+m", 8:"ctrl+shift+d", 9:"ctrl+alt+p", 10:"ctrl+alt+s"}
     },
@@ -450,7 +450,7 @@ const DEFAULT_COMMUNITY_PRESETS = [
         code: "PRO-PR",
         name: "Premiere Timeline Pro",
         category: "Video Editing",
-        color: "#0b3151",
+        color: "#331E54",
         likes: 245,
         macros: {0:"v", 1:"c", 2:"b", 3:"shift+del", 4:"q", 5:"w", 6:"ctrl+shift+k", 7:"ctrl+r", 8:"g", 9:"ctrl+m", 10:"\\"}
     },
@@ -458,7 +458,7 @@ const DEFAULT_COMMUNITY_PRESETS = [
         code: "PRO-RESOLVE",
         name: "DaVinci Color Nodes",
         category: "Color Grading",
-        color: "#592d10",
+        color: "#D32F2F",
         likes: 198,
         macros: {0:"ctrl+b", 1:"ctrl+shift+x", 2:"n", 3:"i", 4:"o", 5:"alt+x", 6:"alt+s", 7:"shift+d", 8:"shift+z", 9:"ctrl+f12", 10:"shift+4"}
     },
@@ -466,7 +466,7 @@ const DEFAULT_COMMUNITY_PRESETS = [
         code: "PRO-BLENDER",
         name: "Blender 3D Suite",
         category: "3D Modeling",
-        color: "#5b4b0f",
+        color: "#E67E22",
         likes: 275,
         macros: {0:"g", 1:"r", 2:"s", 3:"e", 4:"ctrl+r", 5:"i", 6:"alt+z", 7:"z", 8:"ctrl+alt+q", 9:".", 10:"f12"}
     },
@@ -474,7 +474,7 @@ const DEFAULT_COMMUNITY_PRESETS = [
         code: "PRO-PHOTOSHOP",
         name: "Photoshop Creative",
         category: "Graphic Design",
-        color: "#0c5454",
+        color: "#001D34",
         likes: 410,
         macros: {0:"b", 1:"e", 2:"s", 3:"w", 4:"ctrl+t", 5:"alt", 6:"ctrl+shift+i", 7:"ctrl+shift+alt+e", 8:"ctrl+m", 9:"ctrl+d", 10:"ctrl+shift+alt+s"}
     },
@@ -482,7 +482,7 @@ const DEFAULT_COMMUNITY_PRESETS = [
         code: "PRO-EXCEL",
         name: "Excel Analytics Pro",
         category: "Productivity",
-        color: "#0a5234",
+        color: "#107C41",
         likes: 180,
         macros: {0:"alt+=", 1:"ctrl+t", 2:"ctrl+e", 3:"ctrl+shift+=", 4:"ctrl+-", 5:"ctrl+shift+l", 6:"ctrl+1", 7:"ctrl+alt+v", 8:"ctrl+a", 9:"ctrl+;", 10:"shift+f11"}
     },
@@ -490,7 +490,7 @@ const DEFAULT_COMMUNITY_PRESETS = [
         code: "FP-DSC-MUTE",
         name: "Discord Quick Controls",
         category: "Communication",
-        color: "#3f1058",
+        color: "#5865F2",
         likes: 142,
         macros: {0:"ctrl+shift+m", 1:"ctrl+shift+d", 2:"alt+up", 3:"alt+down", 4:"", 5:"", 6:"", 7:"", 8:"", 9:"", 10:""}
     },
@@ -498,7 +498,7 @@ const DEFAULT_COMMUNITY_PRESETS = [
         code: "FP-SPT-MEDIA",
         name: "Spotify Master Deck",
         category: "Media",
-        color: "#0d5a28",
+        color: "#1DB954",
         likes: 98,
         macros: {0:"space", 1:"ctrl+right", 2:"ctrl+left", 3:"ctrl+up", 4:"ctrl+down", 5:"", 6:"", 7:"", 8:"", 9:"", 10:""}
     },
@@ -506,7 +506,7 @@ const DEFAULT_COMMUNITY_PRESETS = [
         code: "FP-VSC-CODE",
         name: "VS Code Developer Map",
         category: "Development",
-        color: "#0e4367",
+        color: "#007ACC",
         likes: 215,
         macros: {0:"ctrl+p", 1:"ctrl+shift+f", 2:"ctrl+`", 3:"ctrl+b", 4:"alt+up", 5:"alt+down", 6:"ctrl+d", 7:"f5", 8:"ctrl+f5", 9:"ctrl+z", 10:"ctrl+s"}
     }
