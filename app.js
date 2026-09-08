@@ -97,8 +97,10 @@ function toggleFeature() {
         colorGroup.style.display = 'none';
         currentPage = 0;
         updatePaginationUI();
+        
+        // RIPRISTINO COLORE ORIGINALE (Rimuove lo stile inline e fa ricadere sul CSS base #313685)
         var body = document.getElementById('app-body');
-        body.style.setProperty('--primary-blue', '#3B82F6');
+        body.style.removeProperty('--primary-blue');
         body.style.removeProperty('--light-blue');
         body.style.removeProperty('--panel-bg-gradient');
     }
@@ -436,7 +438,6 @@ function saveToDevice() {
 // FLUXPAD COMMUNITY PRESETS ENGINE (FULLY OPEN)
 // ====================================================
 
-// Specific brand colors for presets ensuring they look distinct
 const DEFAULT_COMMUNITY_PRESETS = [
     {
         code: "PRO-OBS",
