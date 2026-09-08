@@ -3,7 +3,7 @@
     --panels-background: #dbe3ee;
     --text-color: #151844;
     --secondary-text: #1e215a;
-    --primary-blue: #313685;
+    --primary-blue: #3B82F6;
     --hover-blue: #1c2055;
     --light-blue: #d3e3fd;
     --button-background: #e8eaed;
@@ -81,9 +81,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px; /* Gap piccolissimo per simulare l'attacco meccanico */
+    gap: 8px; /* Simulated physical connection gap */
     width: 100%;
-    max-width: 460px; /* Stessa larghezza fissa del dispositivo sotto */
+    max-width: 460px; /* Same fixed width as the device below */
 }
 
 .bt-module {
@@ -93,7 +93,7 @@ body {
     border-radius: 24px;
     box-shadow: var(--strong-shadow);
     border: 1px solid var(--border-color);
-    display: none; /* Controllato da JS: block o flex quando attivo */
+    display: none; /* Controlled by JS: flex when active */
     justify-content: center;
     align-items: center;
     gap: 8px;
@@ -161,6 +161,7 @@ body {
     align-items: center;
     justify-content: center;
     position: relative; 
+    transition: background-color 0.4s;
 }
 
 /* --------- FAB E IMPOSTAZIONI GLOBALI --------- */
@@ -180,7 +181,7 @@ body {
     font-weight: bold;
     cursor: pointer;
     box-shadow: var(--strong-shadow);
-    transition: all 0.3s ease;
+    transition: all 0.3s ease, background-color 0.4s;
     z-index: 1000;
 }
 
@@ -229,6 +230,7 @@ body {
 .slider-control input[type="range"] {
     width: 100%;
     accent-color: var(--primary-blue);
+    transition: accent-color 0.4s;
 }
 
 /* --------- MINI-GEAR --------- */
@@ -268,7 +270,7 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
-/* --------- BETA BADGE (SOLID BLUE WITH WHITE TEXT) --------- */
+/* --------- BETA BADGE (SOLID WHITE TEXT) --------- */
 .beta-badge {
     display: inline-block;
     background-color: var(--primary-blue);
@@ -280,6 +282,7 @@ body {
     letter-spacing: 0.5px;
     vertical-align: middle;
     box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    transition: background-color 0.4s;
 }
 
 /* --------- TOOLTIP E OVERLAY --------- */
@@ -298,7 +301,7 @@ body {
     font-weight: bold;
     cursor: help;
     position: relative;
-    transition: all 0.2s ease;
+    transition: all 0.4s ease;
 }
 
 .help-tooltip:hover { transform: scale(1.15); }
@@ -306,11 +309,12 @@ body {
 .help-tooltip::after {
     content: attr(data-tooltip);
     position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
-    background-color: var(--text-color); color: var(--main-background);
+    background-color: var(--primary-blue);
+    color: #ffffff;
     padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: normal;
     white-space: normal; width: 230px; text-align: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3); opacity: 0; pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease; z-index: 2000;
+    transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.4s; z-index: 2000;
 }
 
 .help-tooltip:hover::after {
@@ -337,6 +341,11 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     box-shadow: 0 0 8px var(--light-blue);
 }
 
+#display-selected-key {
+    color: var(--primary-blue) !important;
+    transition: color 0.4s;
+}
+
 .capture-shortcut { cursor: pointer; text-align: center; font-weight: bold;}
 .capture-shortcut:focus { background-color: var(--light-blue) !important; color: var(--primary-blue); }
 
@@ -348,10 +357,10 @@ input[type="color"] {
 .primary-button {
     padding: 16px; background: var(--primary-blue); color: #ffffff; 
     border: none; border-radius: 12px; font-size: 16px; font-weight: bold;
-    box-shadow: var(--light-shadow); width: 100%; cursor: pointer; transition: all 0.3s;
+    box-shadow: var(--light-shadow); width: 100%; cursor: pointer; transition: all 0.4s;
 }
 
-.primary-button:hover { background: var(--hover-blue); transform: translateY(-2px); }
+.primary-button:hover { filter: brightness(1.1); transform: translateY(-2px); }
 .primary-button:disabled { 
     background: var(--button-background); color: var(--secondary-text);
     cursor: not-allowed; box-shadow: none; transform: none;
@@ -376,12 +385,14 @@ input[type="color"] {
 .switch input { opacity: 0; width: 0; height: 0; }
 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
 .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-input:checked + .slider { background-color: var(--primary-blue); box-shadow: 0 0 8px var(--light-blue); }
+input:checked + .slider { background-color: var(--primary-blue); box-shadow: 0 0 8px var(--light-blue); transition: background-color 0.4s; }
 input:checked + .slider:before { transform: translateX(22px); }
 
-.pagination { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
-.dot { height: 8px; width: 8px; background-color: var(--secondary-text); border-radius: 50%; display: inline-block; transition: all 0.3s; cursor: pointer; }
-.dot.active { width: 20px; background-color: var(--primary-blue); border-radius: 4px; }
+/* ENLARGED SLIDER DOTS */
+.pagination { display: flex; justify-content: center; gap: 12px; margin-top: 25px; }
+.dot { height: 12px; width: 12px; background-color: var(--secondary-text); border-radius: 50%; display: inline-block; transition: all 0.3s; cursor: pointer; opacity: 0.4; }
+.dot:hover { opacity: 0.8; transform: scale(1.1); }
+.dot.active { width: 28px; background-color: var(--primary-blue); border-radius: 6px; opacity: 1; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
 
 #bottom-settings-panel {
     gap: 0;
