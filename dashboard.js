@@ -131,10 +131,11 @@ function updateDashboardUI() {
             div.style.backgroundColor = "var(--bg-color)";
             div.style.color = "var(--text-main)";
         } else {
+            // Updated to scale using the Primary Blue Hue (215)
             let ratio = clicks / maxClicks;
-            let hue = (1 - ratio) * 210; 
-            div.style.backgroundColor = `hsl(${hue}, 80%, 65%)`;
-            div.style.color = "#ffffff";
+            let lightness = 95 - (ratio * 40); // Scales from 95% (light blue) to 55% (solid blue)
+            div.style.backgroundColor = `hsl(215, 90%, ${lightness}%)`;
+            div.style.color = ratio > 0.5 ? "#ffffff" : "var(--text-main)";
             div.title = `${clicks.toLocaleString()} clicks`;
         }
     });
