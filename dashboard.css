@@ -1,15 +1,14 @@
 :root {
     --bg-color: #dbe3ee;
     --card-bg: #ffffff;
-    --text-main: #191d51;
-    --text-muted: #5f6368;
-    --blue-accent: #1e215a;
-    --green-pastel: #c9f7d6;
-    --green-dark: #155f2a;
-    --purple-pastel: #ead9fa;
-    --purple-dark: #6624a0;
-    --blue-pastel: #cbdaf6;
-    /* Raggi di curvatura leggermente ridotti per proporzione */
+    --text-main: #151844;
+    --text-muted: #1e215a;
+    --blue-accent: #3B82F6;
+    --green-pastel: #d3e3fd; 
+    --green-dark: #313685;
+    --purple-pastel: #e8eaed; 
+    --purple-dark: #151844;
+    --blue-pastel: #d3e3fd;
     --radius-lg: 24px; 
     --radius-md: 14px;
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
@@ -24,7 +23,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow: hidden; /* Blocca la schermata per non farla scorrere */
+    overflow: hidden; 
 }
 
 .header {
@@ -32,7 +31,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 40px; /* Padding verticale ridotto */
+    padding: 15px 40px; 
     box-sizing: border-box;
     background-color: var(--bg-color);
     flex-shrink: 0;
@@ -52,16 +51,16 @@ body {
 }
 .connect-btn:hover { filter: brightness(0.95); }
 
-/* --- 2-COLUMN LAYOUT COMPRESSO --- */
+/* --- 2-COLUMN LAYOUT --- */
 .dashboard-container {
     display: grid;
-    grid-template-columns: 320px 1fr; /* Colonna di sinistra leggermente più snella */
+    grid-template-columns: 320px 1fr; 
     grid-template-rows: auto 1fr;
-    gap: 15px; /* Spazio tra le card ridotto */
+    gap: 15px; 
     width: 100%;
     max-width: 1300px;
     margin: 0 auto;
-    padding: 5px 40px 20px 40px; /* Padding globale ridotto per recuperare spazio in basso */
+    padding: 5px 40px 20px 40px; 
     box-sizing: border-box;
     flex-grow: 1;
     min-height: 0;
@@ -70,7 +69,7 @@ body {
 .card {
     background-color: var(--card-bg);
     border-radius: var(--radius-lg);
-    padding: 20px; /* Spazio vuoto interno ridotto (prima era 30px) */
+    padding: 20px; 
     box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
@@ -85,10 +84,9 @@ body {
     grid-row: 1; 
     align-items: center; 
     justify-content: center; 
-    gap: 20px; /* Spazio tra grafico e box ridotto */
+    gap: 20px; 
 }
 
-/* Grafico ridimensionato per occupare meno altezza */
 .circular-progress {
     width: 140px; height: 140px; 
     border-radius: 50%;
@@ -122,7 +120,6 @@ body {
     height: 100%; 
 }
 
-/* Righe compresse per non sfociare oltre il bordo inferiore */
 .insight-row {
     display: flex; align-items: center; gap: 15px;
     padding: 14px 0; border-bottom: 1px solid #f1f3f4;
@@ -153,7 +150,7 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    gap: 12px; /* Gap ridotto tra i tasti */
+    gap: 12px; 
     flex-grow: 1;
     height: 100%;
     min-height: 0;
@@ -163,7 +160,7 @@ body {
     border-radius: var(--radius-md);
     display: flex; justify-content: center; align-items: center;
     font-size: 18px; font-weight: bold; color: var(--text-main);
-    transition: background-color 0.5s ease; /* Transizione pulita per i colori */
+    transition: background-color 0.5s ease;
     box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
     width: 100%; height: 100%;
 }
