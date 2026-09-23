@@ -3,6 +3,12 @@
 # THIS SCRIPT IS USED TO ALLOW CONTINUOUS ACCESS TO THE CONFIGURATOR IF YOU DON'T WANT TO KEEP THE WEB PAGE OPEN
 # AND IS ONLY NECESSARY FOR CONNECTIONS WITH EXTERNAL ENVIRONMENTS (LIKE HOME ASSISTANT)
 
+# How to use it:
+# 1) Make sure you have installed the necessary libraries by opening the terminal and typing: pip install pyserial requests
+# 2) Edit the SERIAL_PORT variable by entering the correct COM port to which your FluxPad is connected (the same one you see in the Arduino IDE).
+# 3) Enter the correct URLs of your Home Assistant Webhooks in the SMART_HOME_WEBHOOKS dictionary.
+# 4) Run the script. You can have it start automatically when your computer boots up (on Windows you can place a .bat file in the Startup folder, on Linux you can use systemd).
+
 import serial
 import requests
 import time
