@@ -736,6 +736,21 @@ if (testoRicevuto.startsWith("DOMO:")) {
     }
 }
 
+function saveKeyConfiguration(keyIndex) {
+    // Assuming 'actionSelect' is your dropdown element
+    let selectedOption = document.getElementById(`actionSelect_${keyIndex}`).value;
+    
+    // Split the value (e.g., "254:1" becomes mod=254, key=1)
+    let parts = selectedOption.split(":");
+    let modifierByte = parts[0];
+    let actionByte = parts[1] || "0"; 
+
+    // Send the standard SET command to Arduino
+    let command = `SET:${keyIndex}:${modifierByte}:${actionByte}`;
+    sendSerialCommand(command);
+    console.log("Configuration saved:", command);
+}
+
 // Lifecycle Init
 document.addEventListener('DOMContentLoaded', function() {
     populatePresetDropdown();
