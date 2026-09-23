@@ -716,6 +716,26 @@ function onPresetSelected(code) {
     document.getElementById('preset-select').value = "";
 }
 
+// Associa l'URL al tasto nel localStorage e comunica ad Arduino di abilitare la flag domotica
+function impostaTastoDomotico(indice, webhookUrl) {
+    localStorage.setItem("ha_webhook_" + indice, webhookUrl);
+    // Invia il flag speciale alla scheda
+    inviaComandoSeriale(`SET_DOMO:${indice}`); 
+}
+
+// All'interno della funzione asincrona esistente che parsa i dati ricevuti dal Web Serial
+if (testoRicevuto.startsWith("DOMO:")) {
+    let indice = parseInt(testoRicevuto.split(":")[1]);
+    let url = localStorage.getItem("ha_webhook_" + indice);
+    
+    // Sfrutta la rete del dispositivo a cui è collegato per effettuare la connessione
+    if (url) {
+        fetch(url, { method: 'POST' })
+            .then(res => console.log(`Switch domotico ${indice} azionato!`))
+            .catch(err => console.error("Errore di rete verso Home Assistant", err));
+    }
+}
+
 // Lifecycle Init
 document.addEventListener('DOMContentLoaded', function() {
     populatePresetDropdown();
