@@ -111,6 +111,15 @@
                         </label>
                     </div>
 
+                    <!-- Da aggiungere nel blocco delle estensioni o modali -->
+<div class="extension-item">
+  <span>Integrazione Domotica (Home Assistant)</span>
+  <label class="switch">
+    <input type="checkbox" id="domotica-toggle">
+    <span class="slider round"></span>
+  </label>
+</div>
+
                     <!-- Switch Multi-Page -->
                     <div class="feature-header" style="margin-bottom: 0; padding: 10px 15px; width: 100%;">
                         <div class="label-with-help">
@@ -364,16 +373,7 @@
                     <span style="cursor:pointer; font-size:24px; font-weight:bold; color:var(--secondary-text);" onclick="closeCommunityModal()">&times;</span>
                 </div>
 
-                <!-- Da aggiungere nel blocco delle estensioni o modali -->
-<div class="extension-item">
-  <span>Integrazione Domotica (Home Assistant)</span>
-  <label class="switch">
-    <input type="checkbox" id="domotica-toggle">
-    <span class="slider round"></span>
-  </label>
-</div>
-
-                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                     <input type="text" id="feed-search" placeholder="Search presets (e.g. Discord, Spotify, Gaming)..." oninput="filterCommunityFeed(this.value)" style="flex: 2;">
                     <input type="text" id="direct-code-input" placeholder="Paste Code (e.g. FP-DSC-MUTE)" style="flex: 1; text-transform: uppercase;">
                     <button class="primary-button" style="width: auto; padding: 0 18px;" onclick="importDirectCode()">IMPORT</button>
