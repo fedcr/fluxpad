@@ -6,51 +6,82 @@
 import serial
 import requests
 import time
+import webbrowser
 
-# ENTER YOUR COM PORT (e.g., 'COM3' on Windows or '/dev/ttyACM0' on Linux)
-PORTA_SERIALE = 'COM3'  
+# --- CONFIGURATION ---
+SERIAL_PORT = 'COM3'  # Change to your actual COM port (e.g., 'COM3' on Windows, '/dev/ttyACM0' on Linux)
 BAUD_RATE = 9600
 
-# Link the key index (0-11) here to the Home Assistant Webhook
-WEBHOOKS = {
-    0: "http://homeassistant.local:8123/api/webhook/...",
-    1: "http://homeassistant.local:8123/api/webhook/...",
-    # Aggiungi gli altri tasti se necessario...
+# 1. SMART HOME CONFIGURATION
+# Map the action ID to the specific Home Assistant Webhook URL
+SMART_HOME_WEBHOOKS = {
+    0: "http://homeassistant.local:8123/api/webhook/turn_on_studio_lights",
+    1: "http://homeassistant.local:8123/api/webhook/turn_off_all",
+    2: "http://homeassistant.local:8123/api/webhook/toggle_fan"
 }
 
-def avvia_daemon():
+# 2. AI ASSISTANT CONFIGURATION
+# Map the AI service ID to its respective URL
+AI_SERVICES = {
+    1: "https://chatgpt.com/",
+    2: "https://gemini.google.com/",
+    3: "https://claude.ai/",
+    4: "https://www.perplexity.ai/"
+}
+
+def start_daemon():
     try:
-        ser = serial.Serial(PORTA_SERIALE, BAUD_RATE, timeout=1)
-        print(f"FluxPad Daemon waiting on {PORTA_SERIALE}...")
+        # Initialize Serial connection
+        ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+        print(f"FluxPad Daemon listening on {SERIAL_PORT}...")
+        print("Unified Daemon Active: Ready for both Smart Home and AI commands.\n")
         
         while True:
             if ser.in_waiting > 0:
-                linea = ser.readline().decode('utf-8').strip()
+                # Read the incoming serial line
+                line = ser.readline().decode('utf-8').strip()
                 
-
-                if linea.startswith("DOMO:"):
+                # --- HANDLE SMART HOME COMMANDS ---
+                if line.startswith("DOMO:"):
                     try:
-                        indice_tasto = int(linea.split(":")[1])
-                        print(f"Smart home button pressed: {indice_tasto}")
+                        action_id = int(line.split(":")[1])
+                        print(f"[SMART HOME] Triggering Action ID: {action_id}")
+                        url = SMART_HOME_WEBHOOKS.get(action_id)
                         
-                        url = WEBHOOKS.get(indice_tasto)
                         if url:
-                           
                             response = requests.post(url)
-                            print(f"Command sent! Status: {response.status_code}")
+                            print(f"[SMART HOME] Webhook sent! Status: {response.status_code}\n")
                         else:
-                            print(f"No webhook configured in the script for the {button_index} button")
-                            
+                            print(f"[SMART HOME] Error: No webhook configured for action ID {action_id}\n")
                     except Exception as e:
-                        print(f"Errore di rete: {e}")
+                        print(f"[SMART HOME] Network error: {e}\n")
+                
+                # --- HANDLE AI ASSISTANT COMMANDS ---
+                elif line.startswith("AI:"):
+                    try:
+                        ai_id = int(line.split(":")[1])
+                        print(f"[AI ASSISTANT] Opening Service ID: {ai_id}")
+                        url = AI_SERVICES.get(ai_id)
                         
-            time.sleep(0.01)
+                        if url:
+                            webbrowser.open(url) # Automatically opens the default web browser
+                            print(f"[AI ASSISTANT] Opened {url} in browser.\n")
+                        else:
+                            print(f"[AI ASSISTANT] Error: No AI service configured for ID {ai_id}\n")
+                    except Exception as e:
+                        print(f"[AI ASSISTANT] Browser error: {e}\n")
+                        
+            time.sleep(0.01) # Small delay to prevent high CPU usage
             
     except serial.SerialException:
-        print(f"Waiting for FluxPad on {SERIAL_PORT}...)
+        print(f"Waiting for FluxPad to connect on {SERIAL_PORT}...")
         time.sleep(5)
-        avvia_daemon()
+        start_daemon() # Recursively try to reconnect if the USB is unplugged
     except KeyboardInterrupt:
+        print("\nFluxPad Daemon closed by user.")
+
+if __name__ == "__main__":
+    start_daemon()
         print("\nClosing the daemon.")
 
 if __name__ == "__main__":
